@@ -12,7 +12,7 @@ public class Main {
         spamFilter.configureSPAMFilter();
         spamFilter.calculateProbability();
 
-        spamFilter.analyzeMails(HAM_TEST);
+        spamFilter.analyzeMails(SPAM_TEST);
 
     }
 }

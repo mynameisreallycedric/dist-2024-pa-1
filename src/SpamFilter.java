@@ -33,6 +33,10 @@ public class SpamFilter {
         SpamVocabulary = mailHelper.calculateCountOfWords(SPAM_LEARN_PATH);
         HamVocabulary = mailHelper.calculateCountOfWords(HAM_LEARN_PATH);
 
+        /**
+         * All words which are only contained in the spam vocabulary are added to the ham vocabulary and assigned the value alpha and vice versa.
+         * This is to prevent a spam/ham probability of 0 because in the calculation when calculating log of 0 is undefined.
+         */
         SpamOnlyWords = new HashSet<>(SpamVocabulary.keySet());
         HamOnlyWords = new HashSet<>(HamVocabulary.keySet());
 
@@ -148,21 +152,33 @@ public class SpamFilter {
         return probability;
     }
 
-    // Helpers
+    /**
+     * Helpers
+     */
     private void setSpamProbabilityForWord(String word, Double probability){
         SpamProbabilityMatrix.put(word, probability);
     }
 
+    /**
+     * Returns the value in the spam probability for a given word.
+     * To ensure that the spam probability does not equal 0 or NaN when a new word appears this function returns the value ALPHA
+     * @param word - the word to return the probability
+     */
     private double getSpamProbabilityForWord(String word){
-        return SpamProbabilityMatrix.getOrDefault(word, 0.0);
+        return SpamProbabilityMatrix.getOrDefault(word, ALPHA);
     }
 
+    /**
+     * Returns the value in the ham probability for a given word.
+     * To ensure that the ham probability does not equal 0 or NaN when a new word appears this function returns the value ALPHA
+     * @param word - the word to return the probability
+     */
     private void setHamProbabilityForWord(String word, Double probability){
         HamProbabilityMatrix.put(word, probability);
     }
 
     private double getHamProbabilityForWord(String word){
-        return HamProbabilityMatrix.getOrDefault(word, 0.0);
+        return HamProbabilityMatrix.getOrDefault(word, ALPHA);
     }
 
     private double getTotalSpamWords() {
